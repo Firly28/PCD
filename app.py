@@ -58,9 +58,9 @@ if uploaded_file:
 
     col1, col2 = st.columns(2)
     with col1:
-        st.image(preprocessed, caption='Preprocessing (Grayscale & Equalization)', use_column_width=True, clamp=True, channels="GRAY")
+        st.image(preprocessed, caption='Preprocessing (Grayscale & Equalization)', use_container_width=True, clamp=True, channels="GRAY")
     with col2:
-        st.image(segmented, caption='Segmentasi (Otsu Thresholding)', use_column_width=True, clamp=True, channels="GRAY")
+        st.image(segmented, caption='Segmentasi (Otsu Thresholding)', use_container_width=True, clamp=True, channels="GRAY")
 
     # Tampilkan hasil ekstraksi ciri
     st.subheader("📊 Ciri-ciri Gambar")
