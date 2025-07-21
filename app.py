@@ -2,7 +2,8 @@ import streamlit as st
 import cv2
 import numpy as np
 from PIL import Image
-from utils import preprocess_image, segment_image, extract_features
+from src.utils import preprocess_image, segment_image, extract_features
+
 
 st.set_page_config(page_title="Pengolahan Citra", layout="wide")
 st.title("🧠 Pengolahan Citra: Preprocessing, Segmentasi & Ekstraksi Ciri")
