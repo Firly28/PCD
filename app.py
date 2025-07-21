@@ -4,22 +4,14 @@ import numpy as np
 from PIL import Image
 from skimage.feature import graycomatrix, graycoprops
 
+# Konfigurasi Streamlit
 st.set_page_config(page_title="Pengolahan Citra", layout="wide")
 st.title("🧠 Pengolahan Citra: Preprocessing, Segmentasi & Ekstraksi Ciri")
-
 st.markdown("Upload gambar, sistem akan memproses dan menampilkan hasil segmentasi serta ciri-cirinya.")
 
-uploaded_file = st.file_uploader("Unggah gambar", type=["jpg", "jpeg", "png"])
-
-if uploaded_file:
-    image = Image.open(uploaded_file).convert('RGB')
-    img_np = np.array(image)
-
-    st.image(image, caption='Gambar Asli', use_container_width=True)
-
-    # Proses pengolahan citra
-    
-    
+# =======================
+# DEFINISI FUNGSI
+# =======================
 def preprocess_image(image):
     gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
     blur = cv2.GaussianBlur(gray, (5, 5), 0)
@@ -32,7 +24,6 @@ def segment_image(gray_image):
 
 def extract_features(image, mask):
     features = {}
-
     masked = cv2.bitwise_and(image, image, mask=mask)
     mean_val = cv2.mean(masked, mask=mask)
     features['Mean R'] = mean_val[0]
@@ -40,7 +31,6 @@ def extract_features(image, mask):
     features['Mean B'] = mean_val[2]
 
     features['Area'] = cv2.countNonZero(mask)
-
     x, y, w, h = cv2.boundingRect(mask)
     features['Aspect Ratio'] = round(w / h, 2) if h != 0 else 0
 
@@ -49,7 +39,22 @@ def extract_features(image, mask):
     features['Contrast'] = graycoprops(glcm, 'contrast')[0, 0]
     features['Homogeneity'] = graycoprops(glcm, 'homogeneity')[0, 0]
     return features
-    
+
+# =======================
+# UPLOAD & PROSES GAMBAR
+# =======================
+uploaded_file = st.file_uploader("Unggah gambar", type=["jpg", "jpeg", "png"])
+
+if uploaded_file:
+    image = Image.open(uploaded_file).convert('RGB')
+    img_np = np.array(image)
+
+    st.image(image, caption='Gambar Asli', use_container_width=True)
+
+    # Panggil fungsi
+    preprocessed = preprocess_image(img_np)
+    segmented = segment_image(preprocessed)
+    features = extract_features(img_np, segmented)
 
     col1, col2 = st.columns(2)
     with col1:
@@ -61,4 +66,3 @@ def extract_features(image, mask):
     st.subheader("📊 Ciri-ciri Gambar")
     for key, value in features.items():
         st.write(f"**{key}**: {value:.2f}" if isinstance(value, float) else f"**{key}**: {value}")
- 
