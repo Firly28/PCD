@@ -2,7 +2,7 @@ import streamlit as st
 import cv2
 import numpy as np
 from PIL import Image
-from utils import preprocess_image, segment_image, extract_features
+from skimage.feature import graycomatrix, graycoprops
 
 st.set_page_config(page_title="Pengolahan Citra", layout="wide")
 st.title("🧠 Pengolahan Citra: Preprocessing, Segmentasi & Ekstraksi Ciri")
@@ -21,6 +21,35 @@ if uploaded_file:
     preprocessed = preprocess_image(img_np)
     segmented = segment_image(preprocessed)
     features = extract_features(img_np, segmented)
+    def preprocess_image(image):
+    gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+    blur = cv2.GaussianBlur(gray, (5, 5), 0)
+    eq = cv2.equalizeHist(blur)
+    return eq
+
+def segment_image(gray_image):
+    _, mask = cv2.threshold(gray_image, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+    return mask
+
+def extract_features(image, mask):
+    features = {}
+
+    masked = cv2.bitwise_and(image, image, mask=mask)
+    mean_val = cv2.mean(masked, mask=mask)
+    features['Mean R'] = mean_val[0]
+    features['Mean G'] = mean_val[1]
+    features['Mean B'] = mean_val[2]
+
+    features['Area'] = cv2.countNonZero(mask)
+
+    x, y, w, h = cv2.boundingRect(mask)
+    features['Aspect Ratio'] = round(w / h, 2) if h != 0 else 0
+
+    gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+    glcm = graycomatrix(gray, [1], [0], 256, symmetric=True, normed=True)
+    features['Contrast'] = graycoprops(glcm, 'contrast')[0, 0]
+    features['Homogeneity'] = graycoprops(glcm, 'homogeneity')[0, 0]
+    
 
     col1, col2 = st.columns(2)
     with col1:
@@ -32,3 +61,4 @@ if uploaded_file:
     st.subheader("📊 Ciri-ciri Gambar")
     for key, value in features.items():
         st.write(f"**{key}**: {value:.2f}" if isinstance(value, float) else f"**{key}**: {value}")
+    return features
