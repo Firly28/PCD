@@ -15,7 +15,7 @@ if uploaded_file:
     image = Image.open(uploaded_file).convert('RGB')
     img_np = np.array(image)
 
-    st.image(image, caption='Gambar Asli', use_column_width=True)
+    st.image(image, caption='Gambar Asli', use_container_width=True)
 
     # Proses pengolahan citra
     preprocessed = preprocess_image(img_np)
