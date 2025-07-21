@@ -48,6 +48,7 @@ def extract_features(image, mask):
     glcm = graycomatrix(gray, [1], [0], 256, symmetric=True, normed=True)
     features['Contrast'] = graycoprops(glcm, 'contrast')[0, 0]
     features['Homogeneity'] = graycoprops(glcm, 'homogeneity')[0, 0]
+    return features
     
 
     col1, col2 = st.columns(2)
