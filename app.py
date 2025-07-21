@@ -18,9 +18,7 @@ if uploaded_file:
     st.image(image, caption='Gambar Asli', use_container_width=True)
 
     # Proses pengolahan citra
-    preprocessed = preprocess_image(img_np)
-    segmented = segment_image(preprocessed)
-    features = extract_features(img_np, segmented)
+    
     
 def preprocess_image(image):
     gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
