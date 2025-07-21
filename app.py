@@ -4,13 +4,11 @@ import numpy as np
 from PIL import Image
 from utils import preprocess_image, segment_image, extract_features
 
-
 st.set_page_config(page_title="Pengolahan Citra", layout="wide")
 st.title("🧠 Pengolahan Citra: Preprocessing, Segmentasi & Ekstraksi Ciri")
 
 st.markdown("Upload gambar, sistem akan memproses dan menampilkan hasil segmentasi serta ciri-cirinya.")
 
-# Upload gambar
 uploaded_file = st.file_uploader("Unggah gambar", type=["jpg", "jpeg", "png"])
 
 if uploaded_file:
