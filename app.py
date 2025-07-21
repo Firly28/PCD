@@ -62,4 +62,4 @@ def extract_features(image, mask):
     st.subheader("📊 Ciri-ciri Gambar")
     for key, value in features.items():
         st.write(f"**{key}**: {value:.2f}" if isinstance(value, float) else f"**{key}**: {value}")
- return features
+ 
