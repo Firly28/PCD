@@ -6,7 +6,7 @@ from skimage.feature import graycomatrix, graycoprops
 
 # Konfigurasi Streamlit
 st.set_page_config(page_title="Pengolahan Citra", layout="wide")
-st.title("🧠 Pengolahan Citra: Preprocessing, Segmentasi & Ekstraksi Ciri")
+st.title("🧠 Pengolahan Citra:")
 st.markdown("Upload gambar, sistem akan memproses dan menampilkan hasil segmentasi serta ciri-cirinya.")
 
 # =======================
